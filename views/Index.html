@@ -9,70 +9,51 @@
 </html>
 <body>
 <script>
-    var message = [];
-//
-    //var socket = io.connect('http://localhost:8080');
-//socket.on('hay', function (data) {
-//alert (data);
-//});
-
-
-window.onload = function() {
-    document.getElementById('startButton').onclick = function() {
-        iochat(document.getElementById('nickname').value);
-
-
-    };
-
-
-
-//    document.getElementById('startButton').onblur = function() {
-//        iochat(document.getElementById('nickname').value);
-//    }
-
-};
-
-
-function iochat(nick) {
     var socket = io.connect('http://localhost:8080');
 
-//    socket = io.connect('http://localhost:8080');
-//    socket.on('news', function () {
-//        socket.send(nick);
-//    });
-//    socket.on('message', function (msg) {
-//        alert(msg);
-//    });
+    window.onload = function () {
+        document.getElementById('startButton').onclick = function () {
+            iochat(document.getElementById('nickname').value);
+        };
 
-    socket.on('news', function (data) {
-        var para = document.createElement("p");
-        var node = document.createTextNode(""+data.my+"");
-        console.log("teg",para);
-        para.appendChild(node);
+    };
+    function iochat(nick) {
+        var para = document.createElement("li");
         var element = document.getElementById("div1");
-        console.log("div",element);
         element.appendChild(para);
-        message.push(data);
-        console.log(data);
-        socket.emit('my other event', { my: nick });
+
+        /**
+         * send server request and  waiting of response where response come append <ul> tag <li> child tag withe sent text
+         */
+        socket.emit('news', {my: nick}, function (data) {
+            para.appendChild(document.createTextNode(nick));
+            element.appendChild(para);
+        });
+
+    }
+
+
+    /**
+     * where is anybody send message on server and server send we this message and we append <ul> tag <li> child tag withe sent text
+     */
+    socket.on('news', function (data) {
+        var para = document.createElement("li");
+        var element = document.getElementById("div1");
+        console.log("div", element);
+        element.appendChild(para);
+        para.appendChild(document.createTextNode(data.my));
+        element.appendChild(para);
     });
 
-
-
-}
-//
-//function blue() {
-//    socket.on('news', function (data) {
-//        console.log(data);
-//        socket.emit('my other event', { my: 'blue' });
-//    });
-//}
 
 </script>
 
 Введите ник: <input type="text" id="nickname"/>
 <input type="button" value="Start chat" id="startButton"/>
-<div id="div1"></div>
+<ul id="div1">
+
+
+</ul>
 
 </body>
 </html>
