@@ -1,3 +1,18 @@
+# IDE specific
+.idea
+*.iml
+
+idm-home/logs
+idm-home/elasticSearch
+
+
+
+# NPM generated
+src/node_modules/**/*
+src/typings
+/**/*.log
+
+
 # Logs
 logs
 *.log
