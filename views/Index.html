@@ -10,13 +10,42 @@
 <body>
 <script>
     var socket = io.connect('http://localhost:8080');
+    var curretNumber;
 
     window.onload = function () {
         document.getElementById('startButton').onclick = function () {
             iochat(document.getElementById('nickname').value);
         };
 
+        document.getElementById("coreBus").onclick = function () {
+            coreBus();
+        };
+        document.getElementById("joinRoom").onclick = function () {
+            joinRoom();
+        };
+
+
     };
+    function joinRoom() {
+        curretNumber = Math.floor(Math.random() * 6);
+        socket.emit("joinRoom", {
+                busNumber: "" + Math.floor(Math.random() * 6),
+                core: {x: Math.floor(Math.random() * 100 + 1), y: Math.floor(Math.random() * 100 + 1)}
+            },
+            function (data) {
+                console.log(data);
+            })
+
+    }
+
+
+    function coreBus() {
+        console.log("send core bus");
+        socket.emit("coreBus", {
+            busNumber: "" + curretNumber,
+            core: {x: Math.floor(Math.random() * 100 + 1), y: Math.floor(Math.random() * 100 + 1)}
+        })
+    }
     function iochat(nick) {
         var para = document.createElement("li");
         var element = document.getElementById("div1");
@@ -44,12 +73,17 @@
         para.appendChild(document.createTextNode(data.my));
         element.appendChild(para);
     });
+    socket.on("coreBusNumber", function (data) {
+        console.log(data);
+    })
 
 
 </script>
 
 Введите ник: <input type="text" id="nickname"/>
 <input type="button" value="Start chat" id="startButton"/>
+<input type="button" value="join" id="joinRoom"/>
+<input type="button" value="coreBus" id="coreBus"/>
 <ul id="div1">
 
 

@@ -2,9 +2,6 @@
 .idea
 *.iml
 
-idm-home/logs
-idm-home/elasticSearch
-
 
 
 # NPM generated
